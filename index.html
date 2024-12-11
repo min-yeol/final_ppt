@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소비 감소 대시보드</title>
+    <style>
+        body {
+            font-family: 'Lato', Arial, sans-serif;
+            background-color: #e0f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 10px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .header {
+            grid-column: 1 / span 3;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+        .header .customer-id {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .stat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .stat-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 15px;
+            font-weight: bold;
+            height: 190px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .stat-box span {
+            font-size: 17px;
+            margin-top: 13px;
+        }
+        .image-box {
+            background-color: transparent;
+            border-radius: 10px;
+            text-align: center;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-box img {
+            max-width: 250px;
+            max-height: 250px;
+        }
+        .chart-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .donut-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .chart-box canvas {
+            max-width: 1600px;
+            max-height: 250px;
+            margin: 19px;
+            padding: 20px;
+            text-align: center;
+            display: block;
+        }
+        .donut-box canvas {
+            max-width: 280px;
+            max-height: 280px;
+            margin: auto;
+            display: block;
+        }
+        .chart-container {
+            grid-column: 2 / span 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .wide-chart {
+            grid-column: 1 / span 2;
+            height: 290px;
+        }
+        .chart-with-text {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            text-align: left;
+        }
+        .chart-with-text canvas {
+            order: 2;
+            max-width: 200px;
+            max-height: 200px;
+            margin-right: 35px;
+        }
+        .chart-text {
+            order: 1;
+            flex: 1;
+            text-align: left;
+            font-size: 16px;
+            margin-left: 35px;
+        }
+        h4 {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            margin-bottom: 1px;
+            margin-left: 12px;
+        }
+        .chart-text p {
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <div class="customer-id">
+                고객 ID : <strong>2566011840</strong>
+            </div>
+            <div>
+                <label for="customer-id">검색할 고객 ID</label>
+                <input type="text" id="customer-id" placeholder="고객 ID 입력" onkeydown="if(event.key === 'Enter') redirectToNextPage()">
+                <button onclick="redirectToNextPage()">검색</button>
+            </div>
+        </div>
+
+        <!-- Left side: Stats and Image -->
+        <div class="stat-container">
+            <div class="stat-box">소비 감소 위험 고객수<br><span>144,651명</span></div>
+            <div class="stat-box">다음달 매출 손실 예상액<br><span>25,951,630,000원</span></div>
+            <div class="image-box">
+                <img src= "C:\Users\minyeol\Downloads\단디.png" ,alt="캐릭터 이미지">
+            </div>
+        </div>
+
+        <!-- Right side: Charts -->
+        <div class="chart-container">
+            <div class="donut-box">
+                <h4>다음 달 소비 감소 여부</h4>
+                <div class="chart-with-text">
+                    <div class="chart-text">
+                        <p>예측 결과: <strong style="color: red;">소비 감소</strong></p>
+                        <p>소비 감소 확률: <strong>70.39%</strong></p>
+                    </div>
+                    <canvas id="donut-chart"></canvas>
+                </div>
+            </div>
+            <div class="chart-box">
+                <h4>요구불 예금 증감률 추세</h4>
+                <canvas id="line-chart"></canvas>
+            </div>
+            <div class="chart-box wide-chart">
+                <h4>시간에 따른 소비 변화율 추이</h4>
+                <canvas id="area-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function redirectToNextPage() {
+            const customerId = document.getElementById('customer-id').value;
+            if (customerId) {
+                window.location.href = `next.html?customerId=${encodeURIComponent(customerId)}`;
+            } else {
+                alert("고객 ID를 입력해주세요.");
+            }
+        }
+
+        // Donut Chart
+        const ctxDonut = document.getElementById('donut-chart').getContext('2d');
+        new Chart(ctxDonut, {
+            type: 'doughnut',
+            data: {
+                labels: ['소비 감소', '소비 유지'],
+                datasets: [{
+                    data: [70, 30],
+                    backgroundColor: ['#00796b', '#b2dfdb']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+
+        // Line Chart
+        const ctxLine = document.getElementById('line-chart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['23.1', '23.2', '23.3', '23.4', '23.5', '23.6', '23.7', '23.8', '23.9', '23.10', '23.11'],
+                datasets: [{
+                    label: '예금 증감률',
+                    data: [600000, 500000, 200000, 100000, 200000, 400000, 100000, 300000, 400000, 800000, 500000, 400000],
+                    borderColor: '#00796b',
+                    backgroundColor: '#b2dfdb',
+                    fill: true
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Area Chart
+        const ctxArea = document.getElementById('area-chart').getContext('2d');
+        new Chart(ctxArea, {
+            type: 'line',
+            data: {
+                labels: ['23.1', '23.2', '23.3', '23.4', '23.5', '23.6', '23.7', '23.8', '23.9', '23.10', '23.11'],
+                datasets: [{
+                    label: '소비 변화율',
+                    data: [160000, 280000, 380000, 110000, 530000, 260000, 340000, 520000, 240000, 280000, 610000],
+                    borderColor: '#00796b',
+                    backgroundColor: '#b2dfdb',
+                    fill: true
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+</body>
+</html>
